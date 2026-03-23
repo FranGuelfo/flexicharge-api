@@ -1,0 +1,15 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://franguelfo_db_user:KJmD4RknnXrreN2n@cluster0.o4ou2wb.mongodb.net/flexicharge_db?retryWrites=true&w=majority
+      auto-index-creation: true
+application:
+  security:
+    jwt:
+       # Esta es una clave de 256 bits generada aleatoriamente
+      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      # Expiración: 86400000 ms = 24 horas
+      expiration: 86400000
+
+server:
+  port: 8081
