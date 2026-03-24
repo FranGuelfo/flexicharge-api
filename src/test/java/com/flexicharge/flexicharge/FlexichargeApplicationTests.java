@@ -1,4 +1,4 @@
-package com.dev.flexicharge.flexicharge;
+package com.flexicharge.flexicharge;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

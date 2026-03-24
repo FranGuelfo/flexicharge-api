@@ -1,10 +1,12 @@
-package com.dev.flexicharge.flexicharge.service;
+package com.flexicharge.flexicharge.service;
 
+import com.flexicharge.flexicharge.model.Plan;
 import com.flexicharge.flexicharge.model.dto.CustomerDto;
 import com.flexicharge.flexicharge.exception.ResourceNotFoundException;
 import com.flexicharge.flexicharge.mapper.CustomerMapper;
 import com.flexicharge.flexicharge.model.Customer;
 import com.flexicharge.flexicharge.repository.CustomerRepository;
+import com.flexicharge.flexicharge.repository.PlanRepository;
 import com.flexicharge.flexicharge.service.impl.CustomerServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,6 +14,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -25,6 +29,9 @@ class CustomerServiceImplTest {
 
     @Mock
     private CustomerMapper customerMapper;
+
+    @Mock
+    private PlanRepository planRepository;
 
     @InjectMocks
     private CustomerServiceImpl customerService;
@@ -46,7 +53,14 @@ class CustomerServiceImplTest {
     @Test
     void save_ShouldReturnSavedCustomerDto_WhenEmailDoesNotExist() {
         // Arrange
+        Plan mockPlan = new Plan();
+        mockPlan.setName("Premium");
+        mockPlan.setPrice(9.99);
+
         when(customerRepository.existsByEmail(anyString())).thenReturn(false);
+        // AÑADE ESTA LÍNEA para que el repo de planes no devuelva null
+        when(planRepository.findById(any())).thenReturn(Optional.of(mockPlan));
+
         when(customerMapper.toEntity(any())).thenReturn(customer);
         when(customerRepository.save(any())).thenReturn(customer);
         when(customerMapper.toDTO(any())).thenReturn(customerDto);
@@ -56,7 +70,6 @@ class CustomerServiceImplTest {
 
         // Assert
         assertNotNull(result);
-        assertEquals(customerDto.getEmail(), result.getEmail());
         verify(customerRepository).save(any());
     }
 

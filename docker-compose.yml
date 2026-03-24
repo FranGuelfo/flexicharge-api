@@ -7,3 +7,14 @@ services:
       - SPRING_DATA_MONGODB_URI=mongodb+srv://franguelfo_db_user:KJmD4RknnXrreN2n@cluster0.o4ou2wb.mongodb.net/flexicharge_db?retryWrites=true&w=majority
       - APPLICATION_SECURITY_JWT_SECRET-KEY=404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
     restart: always
+
+  sonarqube:
+    image: sonarqube:community
+    container_name: sonarqube
+    ports:
+      - "9000:9000"
+    networks:
+      - sonarnet
+
+networks:
+  sonarnet:

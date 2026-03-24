@@ -1,5 +1,6 @@
 package com.flexicharge.flexicharge.security;
 
+import com.flexicharge.flexicharge.util.AppConstants;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,12 +31,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
 
-        final String authHeader = request.getHeader("Authorization");
+        final String authHeader = request.getHeader(AppConstants.JWT_HEADER);
         final String jwt;
         final String username;
 
         // 1. Si no hay cabecera Authorization o no empieza por Bearer, seguimos con el siguiente filtro
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        if (authHeader == null || !authHeader.startsWith(AppConstants.JWT_PREFIX)) {
             filterChain.doFilter(request, response);
             return;
         }

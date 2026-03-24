@@ -9,6 +9,7 @@ import com.flexicharge.flexicharge.model.dto.CustomerDto;
 import com.flexicharge.flexicharge.repository.CustomerRepository;
 import com.flexicharge.flexicharge.repository.PlanRepository;
 import com.flexicharge.flexicharge.service.CustomerService;
+import com.flexicharge.flexicharge.util.AppConstants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -39,7 +40,7 @@ public class CustomerServiceImpl implements CustomerService {
         log.info("Buscando cliente con id: {}", id);
         return customerRepository.findById(id)
                 .map(customerMapper::toDTO)
-                .orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado con id: " + id));    }
+                .orElseThrow(() -> new ResourceNotFoundException(AppConstants.ERR_CUSTOMER_NOT_FOUND + id));    }
 
     @Override
     public CustomerDto findByEmail(String email) {
@@ -51,12 +52,12 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDto save(CustomerDto customerDto) {
         // 1. Validar email (negocio)
         if (customerRepository.existsByEmail(customerDto.getEmail())) {
-            throw new ResourceNotFoundException("El email ya está registrado.");
+            throw new ResourceNotFoundException(AppConstants.ERR_EMAIL_EXISTS);
         }
 
         // 2. Buscar el Plan REAL en la base de datos para traer su nombre y precio
         Plan plan = planRepository.findById(customerDto.getPlanId())
-                .orElseThrow(() -> new ResourceNotFoundException("El Plan no existe."));
+                .orElseThrow(() -> new ResourceNotFoundException(AppConstants.ERR_PLAN_NOT_FOUND));
 
         // 3. Convertir DTO a Entidad (esto rellena name, email y planId)
         Customer customerEntity = customerMapper.toEntity(customerDto);
@@ -65,7 +66,7 @@ public class CustomerServiceImpl implements CustomerService {
         Subscription sub = new Subscription();
         sub.setPlanName(plan.getName());    // Sacamos el nombre del Plan encontrado
         sub.setPrice(plan.getPrice());      // Sacamos el precio del Plan
-        sub.setStatus("ACTIVE");
+        sub.setStatus(AppConstants.STATUS_ACTIVE);
         sub.setStartDate(LocalDateTime.now());
         sub.setNextBillingDate(LocalDateTime.now().plusMonths(1));
 
