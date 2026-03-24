@@ -1,4 +1,4 @@
-package com.flexicharge.flexicharge.exception;
+package com.flexicharge.flexicharge.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

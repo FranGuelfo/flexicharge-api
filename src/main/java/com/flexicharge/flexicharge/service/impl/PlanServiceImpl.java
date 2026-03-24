@@ -6,6 +6,7 @@ import com.flexicharge.flexicharge.model.Plan;
 import com.flexicharge.flexicharge.model.dto.PlanDto;
 import com.flexicharge.flexicharge.repository.PlanRepository;
 import com.flexicharge.flexicharge.service.PlanService;
+import com.flexicharge.flexicharge.util.AppConstants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -36,7 +37,7 @@ public class PlanServiceImpl implements PlanService {
 
         // 1. Validar si ya existe un plan con ese nombre
         if (planRepository.existsByName(plan.getName())) {
-        throw new ResourceNotFoundException("Ya existe un plan llamado: " + plan.getName());
+        throw new ResourceNotFoundException(AppConstants.ERR_PLAN_EXISTS + plan.getName());
         }
 
         // 2. Convertir DTO a Entidad
@@ -53,7 +54,7 @@ public class PlanServiceImpl implements PlanService {
     public void delete(String id) {
         log.info("Eliminando plan con id: {}", id);
         if(!planRepository.existsById(id)) {
-            throw new ResourceNotFoundException("No se encontro el plan con id: " + id);
+            throw new ResourceNotFoundException(AppConstants.ERR_PLAN_NOT_FOUND + id);
         }
         planRepository.deleteById(id);
     }

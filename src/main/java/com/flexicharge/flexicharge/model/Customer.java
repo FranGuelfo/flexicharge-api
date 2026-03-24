@@ -14,5 +14,5 @@ public class Customer {
     private String name;
     private String email;
     private Subscription subscription;
-    private String planId; // Aquí guardaremos el ID del plan elegido
+    private String planId;
 }
