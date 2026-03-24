@@ -28,6 +28,12 @@
     </scm>
     <properties>
         <java.version>17</java.version>
+        <sonar.exclusions>**/dto/**,**/model/**,**/config/**,**/security/**,**/mapper/**,**/util/AppConstants.java,**/FlexichargeApplication.java</sonar.exclusions>
+        <sonar.coverage.exclusions>
+            **/dto/**,
+            **/model/**,
+            **/mapper/**
+        </sonar.coverage.exclusions>
     </properties>
     <dependencies>
         <dependency>
@@ -130,6 +136,25 @@
                 <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
                 <version>3.10.0.2594</version>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.11</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

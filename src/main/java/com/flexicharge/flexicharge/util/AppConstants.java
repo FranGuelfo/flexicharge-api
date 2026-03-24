@@ -15,6 +15,8 @@ public final class AppConstants {
     public static final String ERR_CUSTOMER_NOT_FOUND = "Cliente no encontrado con id: ";
     public static final String ERR_EMAIL_EXISTS = "El email ya está registrado.";
     public static final String ERR_PLAN_NOT_FOUND = "El Plan seleccionado no existe.";
+    public static final String ERR_PLAN_EXISTS = "El Plan seleccionado existe.";
+    public static final String ERR_CUSTOMER_EMAIL_EXISTS = "No existe un cliente con email: ";
 
     // Estados
     public static final String STATUS_ACTIVE = "ACTIVE";

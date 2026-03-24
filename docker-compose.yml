@@ -4,8 +4,9 @@ services:
     ports:
       - "8081:8081"
     environment:
-      - SPRING_DATA_MONGODB_URI=mongodb+srv://franguelfo_db_user:KJmD4RknnXrreN2n@cluster0.o4ou2wb.mongodb.net/flexicharge_db?retryWrites=true&w=majority
-      - APPLICATION_SECURITY_JWT_SECRET-KEY=404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      # Pasamos las variables del .env al contenedor
+      - SPRING_DATA_MONGODB_URI=mongodb+srv://${MONGO_USER}:${MONGO_PASS}@${MONGO_CLUSTER}/${MONGO_DB}?retryWrites=true&w=majority
+      - APPLICATION_SECURITY_JWT_SECRET-KEY=${JWT_SECRET}
     restart: always
 
   sonarqube:

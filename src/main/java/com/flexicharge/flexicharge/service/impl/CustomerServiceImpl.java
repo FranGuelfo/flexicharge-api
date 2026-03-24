@@ -46,7 +46,7 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDto findByEmail(String email) {
         return customerRepository.findByEmail(email)
                 .map(customerMapper::toDTO)
-                .orElseThrow(() -> new ResourceNotFoundException("No existe un cliente con email: " + email));    }
+                .orElseThrow(() -> new ResourceNotFoundException(AppConstants.ERR_CUSTOMER_EMAIL_EXISTS + email));    }
 
     @Override
     public CustomerDto save(CustomerDto customerDto) {
@@ -84,7 +84,7 @@ public class CustomerServiceImpl implements CustomerService {
     public void delete(String id) {
         log.info("Eliminando cliente con id: {}", id);
         if (!customerRepository.existsById(id)) {
-            throw new ResourceNotFoundException("No se puede eliminar: Cliente no encontrado con id: " + id);
+            throw new ResourceNotFoundException(AppConstants.ERR_CUSTOMER_NOT_FOUND + id);
         }
         customerRepository.deleteById(id);
     }
