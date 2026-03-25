@@ -60,15 +60,21 @@ El proyecto sigue un patrón de **diseño por capas**, asegurando que cada compo
 Para asegurar la integridad del código, el proyecto mantiene una cobertura total.
 
 ### Ejecutar los tests:
-```bash
+bash
+
 mvn clean verify
 Análisis de SonarQube:
+
 Bash
+
 mvn sonar:sonar \
   -Dsonar.projectKey=flexicharge \
   -Dsonar.host.url=http://localhost:9000 \
   -Dsonar.login=TU_TOKEN
-⚙️ Configuración Local
+
+
+### ⚙️ Configuración Local
+
 Clonación: git clone https://github.com/FranGuelfo/flexicharge-api.git
 
 Base de Datos: Asegúrate de tener MongoDB corriendo en el puerto 27017.
@@ -77,5 +83,6 @@ Arranque: Ejecuta mvn spring-boot:run desde la terminal.
 
 Swagger: Accede a http://localhost:8080/swagger-ui.html.
 
-👤 Autor
+### 👤 Autor
+
 Desarrollado con ❤️ por Fran Guelfo.
