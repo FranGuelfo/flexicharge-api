@@ -5,30 +5,35 @@ pipeline {
         maven 'Maven3'
     }
 
-    environment {
-        SONAR_TOKEN = credentials('SONAR_TOKEN')
-    }
-
     stages {
         stage('🚚 Checkout') {
             steps {
+                // 'checkout scm' es perfecto para Multibranch
                 checkout scm
             }
         }
 
         stage('🔨 Build & Test') {
             steps {
-                sh 'mvn clean verify'
+                // El flag -B es para 'Batch mode' (evita logs basura de descarga)
+                sh 'mvn -B clean verify'
             }
         }
 
         stage('🔍 SonarQube Analysis') {
             steps {
-                sh 'mvn sonar:sonar ' +
-                   '-Dsonar.projectKey=flexicharge ' +
-                   '-Dsonar.host.url=http://sonarqube:9000 ' +
-                   '-Dsonar.login=${SONAR_TOKEN}'
+                // Usamos el nombre exacto que pusiste en Manage Jenkins -> System
+                withSonarQubeEnv('SonarQube') {
+                    sh 'mvn sonar:sonar -Dsonar.projectKey=flexicharge'
+                }
             }
+        }
+    }
+
+    post {
+        always {
+            // Limpia el espacio de trabajo para no llenar el disco de Docker
+            deleteDir()
         }
     }
 }
