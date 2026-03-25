@@ -49,8 +49,8 @@ public class CustomerController {
         return new ResponseEntity<>(savedCustomer, HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Eliminar un cliente")
-    @ApiResponse(responseCode = "204", description = "Cliente eliminado")
+    @Operation(summary = "Borrar un cliente")
+    @ApiResponse(responseCode = "204", description = "Cliente borrado")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         customerService.delete(id);
