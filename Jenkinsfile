@@ -21,13 +21,16 @@ pipeline {
         }
 
         stage('🔍 SonarQube Analysis') {
-            steps {
-                // Usamos el nombre exacto que pusiste en Manage Jenkins -> System
-                withSonarQubeEnv('SonarQube') {
-                    sh 'mvn sonar:sonar -Dsonar.projectKey=flexicharge'
+                    steps {
+                        withSonarQubeEnv('SonarQube') {
+                            sh 'mvn sonar:sonar -Dsonar.projectKey=flexicharge'
+                        }
+                        // Esta es la línea mágica que espera la respuesta del Webhook
+                        timeout(time: 5, unit: 'MINUTES') {
+                            waitForQualityGate abortPipeline: true
+                        }
+                    }
                 }
-            }
-        }
     }
 
     post {
