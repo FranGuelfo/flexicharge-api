@@ -1,120 +1,81 @@
-🚀 FlexiCharge API
+# 🚀 FlexiCharge API
 
-FlexiCharge API es una solución robusta para la gestión de clientes y planes de suscripción. Diseñada con un enfoque en
-la calidad del código, la seguridad mediante JWT y la escalabilidad, esta API sirve como el motor central para sistemas
-de facturación o membresías.
+¡Bienvenido a **FlexiCharge API**! Una solución robusta para la gestión de clientes y planes de suscripción, desarrollada con **Spring Boot 3.x** y enfocada en la excelencia técnica.
 
-🛠️ Tecnologías Utilizadas
-Backend: Java 17 con Spring Boot 3.x.
+---
 
-Seguridad: Spring Security + JWT (JSON Web Tokens).
+## 📊 Estado del Proyecto
 
-Base de Datos: MongoDB (NoSQL) para una persistencia flexible.
+Actualmente, el proyecto cuenta con los más altos estándares de calidad:
 
-Mapeo de Datos: MapStruct para una conversión eficiente entre Entidades y DTOs.
+* ✅ **Cobertura de Código:** 100% (Verificado con JaCoCo & SonarQube).
+* 🛡️ **Seguridad:** Implementada mediante JWT y Spring Security.
+* 📖 **Documentación:** Disponible vía Swagger UI.
 
-Documentación: Swagger / OpenAPI 3.
+---
 
-Calidad de Código: SonarQube & JaCoCo (Cobertura del 100%).
+## 🛠️ Stack Tecnológico
 
-Testing: JUnit 5, Mockito y MockMvc.
+| Tecnología | Uso |
+| :--- | :--- |
+| **Java 17** | Lenguaje principal |
+| **Spring Boot 3** | Framework base |
+| **MongoDB** | Base de datos NoSQL |
+| **MapStruct** | Mapeo de DTOs |
+| **JUnit 5 / Mockito** | Testing unitario y mocks |
+| **SonarQube** | Análisis de calidad estático |
 
-🏛️ Arquitectura del Proyecto
+---
 
-El proyecto sigue una arquitectura limpia dividida por capas para facilitar el mantenimiento y el testing unitario:
+## 🏛️ Arquitectura
 
-Controller: Endpoints REST que gestionan las peticiones HTTP.
+El proyecto sigue un patrón de **diseño por capas**, asegurando que cada componente tenga una única responsabilidad:
 
-Service: Lógica de negocio pura, aislada de la infraestructura.
+1.  **Controllers:** Gestión de peticiones REST.
+2.  **Services:** Lógica de negocio e integraciones.
+3.  **Repositories:** Persistencia en MongoDB.
+4.  **Security:** Filtros de autenticación y manejo de tokens.
 
-Repository: Capa de acceso a datos con Spring Data MongoDB.
+---
 
-Model/DTO: Objetos de transferencia de datos y entidades de persistencia.
+## 🔐 Endpoints Principales
 
-Security: Configuración de filtros, proveedores de autenticación y manejo de JWT.
+### 🔑 Autenticación (`/api/auth`)
+* `POST /register` - Registro de nuevos usuarios.
+* `POST /login` - Obtención de token JWT.
 
-🔐 Endpoints Principales
+### 👥 Clientes (`/api/customers`)
+* `GET /` - Listado completo.
+* `POST /` - Alta de cliente.
+* `DELETE /{id}` - Baja de sistema.
 
-Autenticación (/api/auth)
+### 💳 Planes (`/api/plans`)
+* `GET /` - Consulta de planes activos.
+* `POST /` - Creación de nuevas tarifas.
 
-POST /register: Registro de nuevos usuarios.
+---
 
-POST /login: Autenticación y obtención del token JWT.
+## 🧪 Testing y Calidad
 
-Clientes (/api/customers)
+Para asegurar la integridad del código, el proyecto mantiene una cobertura total.
 
-GET /: Listar todos los clientes.
-
-GET /search?email=...: Buscar cliente por email.
-
-POST /: Crear un nuevo cliente.
-
-DELETE /{id}: Eliminar un cliente.
-
-Planes (/api/plans)
-
-GET /: Listar planes disponibles.
-
-POST /: Crear un nuevo plan de suscripción.
-
-DELETE /{id}: Eliminar un plan.
-
-🧪 Calidad y Testing
-
-Este proyecto destaca por su alto estándar de calidad. Actualmente cuenta con una cobertura de código del 100%,
-verificada mediante SonarQube.
-
-Ejecutar Tests Localmente
-
-Para ejecutar la suite de pruebas y generar el informe de cobertura:
-
-Bash
-
+### Ejecutar los tests:
+```bash
 mvn clean verify
-
-Análisis con SonarQube
-
-Si tienes una instancia de SonarQube corriendo localmente:
-
+Análisis de SonarQube:
 Bash
-
 mvn sonar:sonar \
--Dsonar.projectKey=flexicharge \
--Dsonar.host.url=http://localhost:9000 \
--Dsonar.login=TU_TOKEN_AQUI
+  -Dsonar.projectKey=flexicharge \
+  -Dsonar.host.url=http://localhost:9000 \
+  -Dsonar.login=TU_TOKEN
+⚙️ Configuración Local
+Clonación: git clone https://github.com/FranGuelfo/flexicharge-api.git
 
-⚙️ Instalación y Configuración
+Base de Datos: Asegúrate de tener MongoDB corriendo en el puerto 27017.
 
-Clonar el repositorio:
+Arranque: Ejecuta mvn spring-boot:run desde la terminal.
 
-Bash
-
-git clone https://github.com/FranGuelfo/flexicharge-api.git
-
-cd flexicharge-api
-
-Configurar variables de entorno:
-
-Asegúrate de tener instalado MongoDB y configurar el archivo application.properties con tus credenciales.
-
-Ejecutar la aplicación:
-
-Bash
-
-mvn spring-boot:run
-
-Acceder a la documentación:
-
-Una vez arrancado, visita http://localhost:8080/swagger-ui.html.
-
-🔜 Próximos Pasos (Roadmap)
-
-[ ] Integración Continua (CI) con Jenkins.
-
-[ ] Despliegue automatizado en contenedores Docker.
-
-[ ] Implementación de notificaciones vía Email tras el registro.
+Swagger: Accede a http://localhost:8080/swagger-ui.html.
 
 👤 Autor
-
-Fran Guelfo - GitHub
+Desarrollado con ❤️ por Fran Guelfo.
