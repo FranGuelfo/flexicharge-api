@@ -1,7 +1,6 @@
 package com.flexicharge.flexicharge.identity.domain.repository;
 
 import com.flexicharge.flexicharge.identity.domain.entities.CustomerEntity;
-import com.flexicharge.flexicharge.model.Customer;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

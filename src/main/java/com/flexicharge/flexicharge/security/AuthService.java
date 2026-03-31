@@ -1,4 +1,4 @@
-package com.flexicharge.flexicharge.service;
+package com.flexicharge.flexicharge.security;
 
 import com.flexicharge.flexicharge.model.dto.security.AuthRequest;
 import com.flexicharge.flexicharge.model.dto.security.AuthResponse;

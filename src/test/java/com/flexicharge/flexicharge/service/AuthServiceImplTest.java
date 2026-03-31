@@ -5,7 +5,7 @@ import com.flexicharge.flexicharge.model.dto.security.AuthRequest;
 import com.flexicharge.flexicharge.model.dto.security.AuthResponse;
 import com.flexicharge.flexicharge.repository.UserRepository;
 import com.flexicharge.flexicharge.security.JwtService;
-import com.flexicharge.flexicharge.service.impl.AuthServiceImpl;
+import com.flexicharge.flexicharge.security.AuthServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

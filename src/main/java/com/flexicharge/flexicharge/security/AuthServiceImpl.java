@@ -1,11 +1,9 @@
-package com.flexicharge.flexicharge.service.impl;
+package com.flexicharge.flexicharge.security;
 
 import com.flexicharge.flexicharge.model.User;
 import com.flexicharge.flexicharge.model.dto.security.AuthRequest;
 import com.flexicharge.flexicharge.model.dto.security.AuthResponse;
 import com.flexicharge.flexicharge.repository.UserRepository;
-import com.flexicharge.flexicharge.security.JwtService;
-import com.flexicharge.flexicharge.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;

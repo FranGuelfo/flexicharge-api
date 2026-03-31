@@ -1,8 +1,7 @@
-package com.flexicharge.flexicharge.controller;
+package com.flexicharge.flexicharge.security;
 
 import com.flexicharge.flexicharge.model.dto.security.AuthRequest;
 import com.flexicharge.flexicharge.model.dto.security.AuthResponse;
-import com.flexicharge.flexicharge.service.AuthService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
