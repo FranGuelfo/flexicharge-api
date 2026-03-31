@@ -25,4 +25,6 @@ public final class AppConstants {
     // Paginación por defecto (si la usas luego)
     public static final String DEFAULT_PAGE_NUMBER = "0";
     public static final String DEFAULT_PAGE_SIZE = "10";
+
+    public static final String STARTED = "STARTED";
 }
