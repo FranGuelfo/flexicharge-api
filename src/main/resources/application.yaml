@@ -1,14 +1,20 @@
 spring:
   data:
     mongodb:
-      uri: mongodb+srv://${MONGO_USER}:${MONGO_PASS}@${MONGO_CLUSTER}/${MONGO_DB}?retryWrites=true&w=majority
+      uri: 'mongodb+srv://${MONGO_USER}:${MONGO_PASS}@${MONGO_CLUSTER}/${MONGO_DB}?retryWrites=true&w=majority'
       auto-index-creation: true
+
 application:
   security:
     jwt:
       secret-key: ${JWT_SECRET}
-      # 24 horas
       expiration: 86400000
 
 server:
   port: 8081
+
+# Configuración personalizada de precios
+billing:
+  prices:
+    punta: 0.50
+    valle: 0.20
