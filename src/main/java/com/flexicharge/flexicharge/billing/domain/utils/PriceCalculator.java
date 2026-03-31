@@ -1,6 +1,9 @@
 package com.flexicharge.flexicharge.billing.domain.utils;
 
-import org.springframework.beans.factory.annotation.Value;
+import com.flexicharge.flexicharge.billing.exceptions.InfrastructureException;
+import com.flexicharge.flexicharge.plans.domain.entities.PricingPlanEntity;
+import com.flexicharge.flexicharge.plans.domain.repository.PricingPlanRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -8,25 +11,29 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 
 @Component
+@RequiredArgsConstructor
 public class PriceCalculator {
 
-    @Value("${billing.prices.punta}")
-    private BigDecimal precioPunta;
+    private final PricingPlanRepository planRepository;
 
-    @Value("${billing.prices.valle}")
-    private BigDecimal precioValle;
+    public BigDecimal calculatePrice(OffsetDateTime fecha, String planId) {
 
-    public BigDecimal calculatePrice(OffsetDateTime fecha) {
+        String effectivePlanId = (planId == null) ? "BASIC" : planId;
 
+        // 1. Buscamos el plan en la base de datos
+        PricingPlanEntity plan = planRepository.findById(effectivePlanId)
+                .orElseThrow(() -> new InfrastructureException("Plan de precios no encontrado: " + planId));
+
+        // 2. Lógica de tiempo (la que ya teníamos)
         LocalTime horaActual = fecha.toLocalTime();
         LocalTime inicioPunta = LocalTime.of(8, 0);
         LocalTime finPunta = LocalTime.of(22, 0);
 
-        // Tarifa punta de 08:00:00 a 21:59:59
+        // 3. Aplicamos los precios DEL PLAN
         if (!horaActual.isBefore(inicioPunta) && horaActual.isBefore(finPunta)) {
-            return precioPunta;
+            return plan.getPricePunta();
         } else {
-            return precioValle;
+            return plan.getPriceValle();
         }
     }
 }

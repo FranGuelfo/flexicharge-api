@@ -12,6 +12,8 @@ import java.util.List;
 public class ActiveSessionDTO {
     private String sessionId;
     private String chargerId;
+    private String customerName;
+    private String planName;
     private OffsetDateTime startTime;
     private Double initialKwh;
     private Double currentKwh;

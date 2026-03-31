@@ -5,6 +5,7 @@ import com.flexicharge.flexicharge.billing.domain.ports.out.PdfGeneratorPort;
 import com.flexicharge.flexicharge.billing.exceptions.InfrastructureException;
 import com.flexicharge.flexicharge.charging.domain.entities.HeartbeatLog;
 import com.lowagie.text.*;
+import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import lombok.extern.slf4j.Slf4j;
@@ -26,68 +27,98 @@ public class OpenPdfAdapter implements PdfGeneratorPort {
         DecimalFormat currencyFormat = new DecimalFormat("#,##0.00");
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
+        // Definición de fuentes al inicio para evitar errores de compilación
+        Font fontTitle = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 20);
+        Font fontSubtitle = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14);
+        Font fontBold = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12);
+        Font fontSmall = FontFactory.getFont(FontFactory.HELVETICA, 8);
+
         try {
             PdfWriter.getInstance(document, out);
             document.open();
 
-            // Título principal
-            Font fontTitle = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 20);
+            // --- CABECERA ---
             Paragraph title = new Paragraph("FACTURA FLEXICHARGE", fontTitle);
             title.setAlignment(Element.ALIGN_CENTER);
             document.add(title);
-
-            document.add(new Paragraph(" ")); // Espacio en blanco
             document.add(new Paragraph(" "));
 
-            // Datos de la factura
-            document.add(new Paragraph("ID Factura: " + invoice.getId()));
-            document.add(new Paragraph("Cliente: " + invoice.getCustomerEmail()));
-            document.add(new Paragraph("Fecha de emisión: " + invoice.getCreatedAt().format(dateFormat)));
+            // --- DATOS DE FACTURA Y CLIENTE ---
+            // Usamos una tabla sin bordes para alinear datos de factura (izquierda) y cliente (derecha)
+            PdfPTable headerTable = new PdfPTable(2);
+            headerTable.setWidthPercentage(100);
+            headerTable.getDefaultCell().setBorder(Rectangle.NO_BORDER);
+
+            // Celda Izquierda: Info Factura
+            PdfPCell infoCell = new PdfPCell();
+            infoCell.setBorder(Rectangle.NO_BORDER);
+            infoCell.addElement(new Paragraph("ID Factura: " + invoice.getId(), fontSmall));
+            infoCell.addElement(new Paragraph("Fecha emisión: " + invoice.getCreatedAt().format(dateFormat), fontSmall));
+            headerTable.addCell(infoCell);
+
+            // Celda Derecha: Info Cliente (Usando los nuevos campos de la entidad)
+            PdfPCell customerCell = new PdfPCell();
+            customerCell.setBorder(Rectangle.NO_BORDER);
+            customerCell.addElement(new Paragraph("DATOS DEL CLIENTE", fontBold));
+            customerCell.addElement(new Paragraph(invoice.getCustomerFullName()));
+            customerCell.addElement(new Paragraph("NIF: " + invoice.getCustomerNif()));
+            customerCell.addElement(new Paragraph(invoice.getCustomerAddress()));
+            customerCell.addElement(new Paragraph("Email: " + invoice.getCustomerEmail()));
+            headerTable.addCell(customerCell);
+
+            document.add(headerTable);
             document.add(new Paragraph("---------------------------------------------------------------------------------------"));
             document.add(new Paragraph(" "));
 
-            // Cuerpo de la factura
-            Font fontBold = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12);
-
-            document.add(new Paragraph("DETALLE DE LA CARGA", fontBold));
-            document.add(new Paragraph("---------------------------"));
-            document.add(new Paragraph("Fecha Inicio: " + invoice.getSessionStart().format(dateFormat)));
-            document.add(new Paragraph("Fecha Fin:    " + invoice.getSessionEnd().format(dateFormat)));
-            document.add(new Paragraph("Lectura Inicial: " + invoice.getInitialKwh() + " kWh"));
-            document.add(new Paragraph("Lectura Final:   " + invoice.getFinalKwh() + " kWh"));
-            document.add(new Paragraph("Consumo Total:   " + invoice.getTotalKwh() + " kWh"));
-            document.add(new Paragraph("Precio aplicado: " + currencyFormat.format(invoice.getAppliedPrice()) + " €/kWh"));
-
+            // --- DETALLE DE LA CARGA ---
+            document.add(new Paragraph("DETALLE DE LA SESIÓN", fontSubtitle));
             document.add(new Paragraph(" "));
 
+            PdfPTable detailTable = new PdfPTable(2);
+            detailTable.setWidthPercentage(60);
+            detailTable.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+            addTableCell(detailTable, "Fecha Inicio:", invoice.getSessionStart().format(dateFormat));
+            addTableCell(detailTable, "Fecha Fin:", invoice.getSessionEnd().format(dateFormat));
+            addTableCell(detailTable, "Lectura Inicial:", invoice.getInitialKwh() + " kWh");
+            addTableCell(detailTable, "Lectura Final:", invoice.getFinalKwh() + " kWh");
+            addTableCell(detailTable, "Consumo Total:", invoice.getTotalKwh() + " kWh");
+            addTableCell(detailTable, "Precio aplicado:", currencyFormat.format(invoice.getAppliedPrice()) + " €/kWh");
+
+            document.add(detailTable);
+            document.add(new Paragraph(" "));
+
+            // --- HISTORIAL (LOG) ---
             document.add(new Paragraph("HISTORIAL DE CARGA (LOG)", fontBold));
             document.add(new Paragraph(" "));
 
             if (invoice.getHistory() != null && !invoice.getHistory().isEmpty()) {
-                PdfPTable table = new PdfPTable(2);
-                table.setWidthPercentage(100);
-                table.addCell("Hora");
-                table.addCell("Lectura (kWh)");
+                PdfPTable logTable = new PdfPTable(2);
+                logTable.setWidthPercentage(100);
+                logTable.addCell(new Phrase("Hora", fontBold));
+                logTable.addCell(new Phrase("Lectura (kWh)", fontBold));
 
-                for (HeartbeatLog log : invoice.getHistory()) {
-                    table.addCell(log.getTimestamp().format(dateFormat));
-                    table.addCell(String.valueOf(log.getKwh()));
+                for (HeartbeatLog logEntry : invoice.getHistory()) {
+                    logTable.addCell(logEntry.getTimestamp().format(dateFormat));
+                    logTable.addCell(String.valueOf(logEntry.getKwh()));
                 }
-                document.add(table);
+                document.add(logTable);
             } else {
-                document.add(new Paragraph("No se registraron cambios de lectura durante la sesión."));
+                document.add(new Paragraph("No se registraron cambios intermedios."));
             }
 
-            // Total destacado
-            Paragraph total = new Paragraph("TOTAL A PAGAR: " + currencyFormat.format(invoice.getTotalAmount()) + " €", fontBold);
+            document.add(new Paragraph(" "));
+
+            // --- TOTAL ---
+            Paragraph total = new Paragraph("TOTAL A PAGAR: " + currencyFormat.format(invoice.getTotalAmount()) + " €", fontSubtitle);
+            total.setAlignment(Element.ALIGN_RIGHT);
             document.add(total);
 
             document.add(new Paragraph(" "));
             document.add(new Paragraph("---------------------------------------------------------------------------------------"));
 
-            // Pie de página simple
-            Font fontSmall = FontFactory.getFont(FontFactory.HELVETICA, 8);
-            Paragraph footer = new Paragraph("Gracias por cargar con FlexiCharge. Factura generada automáticamente.", fontSmall);
+            // --- PIE DE PÁGINA ---
+            Paragraph footer = new Paragraph("Gracias por confiar en FlexiCharge. \nFactura generada electrónicamente conforme a la normativa vigente.", fontSmall);
             footer.setAlignment(Element.ALIGN_CENTER);
             document.add(footer);
 
@@ -98,5 +129,11 @@ public class OpenPdfAdapter implements PdfGeneratorPort {
         }
 
         return out.toByteArray();
+    }
+
+    // Método auxiliar para no repetir código en las tablas
+    private void addTableCell(PdfPTable table, String label, String value) {
+        table.addCell(new Phrase(label));
+        table.addCell(new Phrase(value));
     }
 }
