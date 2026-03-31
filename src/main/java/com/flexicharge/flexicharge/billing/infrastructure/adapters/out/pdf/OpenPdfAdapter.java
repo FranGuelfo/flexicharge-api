@@ -2,15 +2,19 @@ package com.flexicharge.flexicharge.billing.infrastructure.adapters.out.pdf;
 
 import com.flexicharge.flexicharge.billing.domain.entities.InvoiceEntity;
 import com.flexicharge.flexicharge.billing.domain.ports.out.PdfGeneratorPort;
-import com.flexicharge.flexicharge.billing.exceptions.BillingException;
+import com.flexicharge.flexicharge.billing.exceptions.InfrastructureException;
+import com.flexicharge.flexicharge.charging.domain.entities.HeartbeatLog;
 import com.lowagie.text.*;
+import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayOutputStream;
 import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
 
+@Slf4j
 @Component
 public class OpenPdfAdapter implements PdfGeneratorPort {
 
@@ -42,15 +46,37 @@ public class OpenPdfAdapter implements PdfGeneratorPort {
             document.add(new Paragraph("---------------------------------------------------------------------------------------"));
             document.add(new Paragraph(" "));
 
-            // Cuerpo de la factura (Consumo y Precios)
+            // Cuerpo de la factura
             Font fontBold = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12);
 
-            document.add(new Paragraph("Energía consumida: " + invoice.getTotalKwh() + " kWh"));
+            document.add(new Paragraph("DETALLE DE LA CARGA", fontBold));
+            document.add(new Paragraph("---------------------------"));
+            document.add(new Paragraph("Fecha Inicio: " + invoice.getSessionStart().format(dateFormat)));
+            document.add(new Paragraph("Fecha Fin:    " + invoice.getSessionEnd().format(dateFormat)));
+            document.add(new Paragraph("Lectura Inicial: " + invoice.getInitialKwh() + " kWh"));
+            document.add(new Paragraph("Lectura Final:   " + invoice.getFinalKwh() + " kWh"));
+            document.add(new Paragraph("Consumo Total:   " + invoice.getTotalKwh() + " kWh"));
+            document.add(new Paragraph("Precio aplicado: " + currencyFormat.format(invoice.getAppliedPrice()) + " €/kWh"));
 
-            // Mostramos el precio aplicado (0.50 o 0.20)
-            document.add(new Paragraph("Precio unitario: " + currencyFormat.format(invoice.getAppliedPrice()) + " €/kWh"));
+            document.add(new Paragraph(" "));
 
-            document.add(new Paragraph(" ")); // Separador
+            document.add(new Paragraph("HISTORIAL DE CARGA (LOG)", fontBold));
+            document.add(new Paragraph(" "));
+
+            if (invoice.getHistory() != null && !invoice.getHistory().isEmpty()) {
+                PdfPTable table = new PdfPTable(2);
+                table.setWidthPercentage(100);
+                table.addCell("Hora");
+                table.addCell("Lectura (kWh)");
+
+                for (HeartbeatLog log : invoice.getHistory()) {
+                    table.addCell(log.getTimestamp().format(dateFormat));
+                    table.addCell(String.valueOf(log.getKwh()));
+                }
+                document.add(table);
+            } else {
+                document.add(new Paragraph("No se registraron cambios de lectura durante la sesión."));
+            }
 
             // Total destacado
             Paragraph total = new Paragraph("TOTAL A PAGAR: " + currencyFormat.format(invoice.getTotalAmount()) + " €", fontBold);
@@ -67,7 +93,8 @@ public class OpenPdfAdapter implements PdfGeneratorPort {
 
             document.close();
         } catch (Exception e) {
-            throw new BillingException("Error al generar el PDF con OpenPDF");
+            log.error("Error técnico generando PDF: {}", e.getMessage());
+            throw new InfrastructureException("Error al generar el PDF con OpenPDF");
         }
 
         return out.toByteArray();

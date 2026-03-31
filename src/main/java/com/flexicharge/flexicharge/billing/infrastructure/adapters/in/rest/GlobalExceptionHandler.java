@@ -1,5 +1,6 @@
 package com.flexicharge.flexicharge.billing.infrastructure.adapters.in.rest;
 
+import com.flexicharge.flexicharge.billing.exceptions.InfrastructureException;
 import com.flexicharge.flexicharge.billing.infrastructure.adapters.in.rest.dto.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleAllExceptions(Exception ex, HttpServletRequest request) {
         log.error("Error no controlado: ", ex);
         return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Ha ocurrido un error inesperado", request);
+    }
+
+    @ExceptionHandler(InfrastructureException.class)
+    public ResponseEntity<ErrorResponse> handleInfrastructure(InfrastructureException ex, HttpServletRequest request) {
+        log.error("Error de infraestructura detectado: {}", ex.getMessage());
+        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), request);
     }
 
     private ResponseEntity<ErrorResponse> buildResponse(HttpStatus status, String message, HttpServletRequest request) {
