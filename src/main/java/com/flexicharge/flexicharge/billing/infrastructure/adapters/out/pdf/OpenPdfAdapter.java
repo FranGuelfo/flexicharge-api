@@ -2,6 +2,7 @@ package com.flexicharge.flexicharge.billing.infrastructure.adapters.out.pdf;
 
 import com.flexicharge.flexicharge.billing.domain.entities.InvoiceEntity;
 import com.flexicharge.flexicharge.billing.domain.ports.out.PdfGeneratorPort;
+import com.flexicharge.flexicharge.billing.exceptions.BillingException;
 import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfWriter;
 import org.springframework.stereotype.Component;
@@ -18,7 +19,6 @@ public class OpenPdfAdapter implements PdfGeneratorPort {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         Document document = new Document(PageSize.A4);
 
-        // Formateadores para que la factura quede "bonita"
         DecimalFormat currencyFormat = new DecimalFormat("#,##0.00");
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
@@ -67,7 +67,7 @@ public class OpenPdfAdapter implements PdfGeneratorPort {
 
             document.close();
         } catch (Exception e) {
-            throw new RuntimeException("Error al generar el PDF con OpenPDF", e);
+            throw new BillingException("Error al generar el PDF con OpenPDF");
         }
 
         return out.toByteArray();
