@@ -23,7 +23,6 @@ public class GenerateInvoiceService {
     private final PriceCalculator priceCalculator;
 
     public byte[] createAndSaveInvoice(String email, Double kwh) {
-        // --- VALIDACIÓN ---
         if (kwh == null || kwh <= 0) {
             log.error("Intento de factura con kWh inválido: {}", kwh);
             throw new IllegalArgumentException("El consumo de energía debe ser mayor que cero.");
@@ -31,7 +30,6 @@ public class GenerateInvoiceService {
 
         LocalDateTime ahora = LocalDateTime.now();
 
-        // Usamos el método del Bean inyectado
         BigDecimal precioAplicado = priceCalculator.calcularPrecioSegunHora(ahora);
 
         BigDecimal totalAmount = precioAplicado.multiply(BigDecimal.valueOf(kwh))
