@@ -1,4 +1,4 @@
-package com.flexicharge.flexicharge.identity.domain.entities;
+package com.flexicharge.flexicharge.shared;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

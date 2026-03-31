@@ -1,7 +1,7 @@
 package com.flexicharge.flexicharge.identity.application.services;
 
-import com.flexicharge.flexicharge.billing.exceptions.InfrastructureException;
-import com.flexicharge.flexicharge.identity.domain.entities.Address;
+import com.flexicharge.flexicharge.shared.InfrastructureException;
+import com.flexicharge.flexicharge.shared.Address;
 import com.flexicharge.flexicharge.identity.domain.entities.CustomerEntity;
 import com.flexicharge.flexicharge.identity.domain.entities.CustomerProfileRequest;
 import com.flexicharge.flexicharge.identity.domain.repository.CustomerRepository;

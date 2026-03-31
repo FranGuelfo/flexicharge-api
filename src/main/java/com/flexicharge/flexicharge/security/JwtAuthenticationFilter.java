@@ -1,6 +1,6 @@
 package com.flexicharge.flexicharge.security;
 
-import com.flexicharge.flexicharge.util.AppConstants;
+import com.flexicharge.flexicharge.shared.AppConstants;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

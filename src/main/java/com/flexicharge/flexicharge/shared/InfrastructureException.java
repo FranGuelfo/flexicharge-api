@@ -1,4 +1,4 @@
-package com.flexicharge.flexicharge.billing.exceptions;
+package com.flexicharge.flexicharge.shared;
 
 public class InfrastructureException extends RuntimeException {
     public InfrastructureException(String message) {

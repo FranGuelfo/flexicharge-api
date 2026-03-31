@@ -2,7 +2,7 @@ package com.flexicharge.flexicharge.assets.application;
 
 import com.flexicharge.flexicharge.assets.domain.entities.ChargerEntity;
 import com.flexicharge.flexicharge.assets.domain.repository.ChargerRepository;
-import com.flexicharge.flexicharge.billing.exceptions.InfrastructureException;
+import com.flexicharge.flexicharge.shared.InfrastructureException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

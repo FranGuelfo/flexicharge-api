@@ -1,6 +1,5 @@
-package com.flexicharge.flexicharge.billing.infrastructure.adapters.in.rest;
+package com.flexicharge.flexicharge.shared;
 
-import com.flexicharge.flexicharge.billing.exceptions.InfrastructureException;
 import com.flexicharge.flexicharge.billing.infrastructure.adapters.in.rest.dto.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;

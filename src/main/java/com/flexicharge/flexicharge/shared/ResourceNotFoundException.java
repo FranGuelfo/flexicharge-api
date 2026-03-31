@@ -1,4 +1,4 @@
-package com.flexicharge.flexicharge.exception;
+package com.flexicharge.flexicharge.shared;
 
 public class ResourceNotFoundException extends RuntimeException {
     public ResourceNotFoundException(String message) {

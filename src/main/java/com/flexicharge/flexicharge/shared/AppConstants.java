@@ -1,4 +1,4 @@
-package com.flexicharge.flexicharge.util;
+package com.flexicharge.flexicharge.shared;
 
 public final class AppConstants {
 

@@ -1,5 +1,6 @@
 package com.flexicharge.flexicharge.identity.domain.entities;
 
+import com.flexicharge.flexicharge.shared.Address;
 import jakarta.persistence.Id;
 import lombok.*;
 import org.springframework.data.mongodb.core.index.Indexed;
