@@ -1,7 +1,7 @@
 package com.flexicharge.flexicharge.billing.infrastructure.adapters.out.email;
 
 import com.flexicharge.flexicharge.billing.domain.ports.out.EmailServicePort;
-import com.flexicharge.flexicharge.billing.exceptions.InfrastructureException;
+import com.flexicharge.flexicharge.shared.InfrastructureException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

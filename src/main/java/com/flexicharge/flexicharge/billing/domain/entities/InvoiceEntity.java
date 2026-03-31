@@ -32,6 +32,9 @@ public class InvoiceEntity {
     private OffsetDateTime createdAt;
     private String pdfPath;
     private List<ChargeSlot> details;
+    private String customerFullName;
+    private String customerNif;
+    private String customerAddress;
 
     @Builder.Default
     private List<HeartbeatLog> history = new ArrayList<>();
