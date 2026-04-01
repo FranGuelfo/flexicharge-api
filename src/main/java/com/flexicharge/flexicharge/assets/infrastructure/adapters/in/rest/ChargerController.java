@@ -1,4 +1,4 @@
-package com.flexicharge.flexicharge.assets.infrastructure;
+package com.flexicharge.flexicharge.assets.infrastructure.adapters.in.rest;
 
 import com.flexicharge.flexicharge.assets.application.ChargerService;
 import com.flexicharge.flexicharge.assets.domain.entities.ChargerEntity;

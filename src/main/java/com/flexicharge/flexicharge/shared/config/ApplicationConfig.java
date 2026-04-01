@@ -1,4 +1,4 @@
-package com.flexicharge.flexicharge.config;
+package com.flexicharge.flexicharge.shared.config;
 
 import com.flexicharge.flexicharge.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

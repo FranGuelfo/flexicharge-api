@@ -1,4 +1,4 @@
-package com.flexicharge.flexicharge.config;
+package com.flexicharge.flexicharge.shared.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

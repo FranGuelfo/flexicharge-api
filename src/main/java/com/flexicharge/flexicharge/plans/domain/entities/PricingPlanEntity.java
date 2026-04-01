@@ -26,4 +26,6 @@ public class PricingPlanEntity {
 
     // Podemos añadir un descuento fijo o cuota mensual en el futuro
     private BigDecimal monthlyFee;
+
+    private boolean active = true;
 }

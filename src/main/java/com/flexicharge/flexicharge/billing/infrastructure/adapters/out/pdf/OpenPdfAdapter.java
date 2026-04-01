@@ -2,7 +2,7 @@ package com.flexicharge.flexicharge.billing.infrastructure.adapters.out.pdf;
 
 import com.flexicharge.flexicharge.billing.domain.entities.InvoiceEntity;
 import com.flexicharge.flexicharge.billing.domain.ports.out.PdfGeneratorPort;
-import com.flexicharge.flexicharge.shared.InfrastructureException;
+import com.flexicharge.flexicharge.shared.exception.InfrastructureException;
 import com.flexicharge.flexicharge.charging.domain.entities.HeartbeatLog;
 import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfPCell;

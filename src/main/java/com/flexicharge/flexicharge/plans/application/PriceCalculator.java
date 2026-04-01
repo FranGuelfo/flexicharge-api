@@ -1,6 +1,6 @@
-package com.flexicharge.flexicharge.plans.utils;
+package com.flexicharge.flexicharge.plans.application;
 
-import com.flexicharge.flexicharge.shared.InfrastructureException;
+import com.flexicharge.flexicharge.shared.exception.InfrastructureException;
 import com.flexicharge.flexicharge.plans.domain.entities.PricingPlanEntity;
 import com.flexicharge.flexicharge.plans.domain.repository.PricingPlanRepository;
 import lombok.RequiredArgsConstructor;

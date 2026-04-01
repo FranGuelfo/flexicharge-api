@@ -1,4 +1,4 @@
-package com.flexicharge.flexicharge.shared;
+package com.flexicharge.flexicharge.shared.exception;
 
 import com.flexicharge.flexicharge.billing.infrastructure.adapters.in.rest.dto.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;

@@ -26,4 +26,6 @@ public class ChargerEntity {
     private Double longitude;
 
     private OffsetDateTime lastHeartbeat;
+
+    private boolean active = true;
 }

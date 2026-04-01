@@ -1,4 +1,4 @@
-package com.flexicharge.flexicharge.config;
+package com.flexicharge.flexicharge.shared.config;
 
 import com.flexicharge.flexicharge.assets.domain.entities.ChargerEntity;
 import com.flexicharge.flexicharge.assets.domain.repository.ChargerRepository;
