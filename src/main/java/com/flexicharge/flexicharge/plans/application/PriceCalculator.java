@@ -4,6 +4,7 @@ import com.flexicharge.flexicharge.shared.exception.InfrastructureException;
 import com.flexicharge.flexicharge.plans.domain.entities.PricingPlanEntity;
 import com.flexicharge.flexicharge.plans.domain.repository.PricingPlanRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -12,28 +13,28 @@ import java.time.OffsetDateTime;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class PriceCalculator {
 
     private final PricingPlanRepository planRepository;
 
-    public BigDecimal calculatePrice(OffsetDateTime fecha, String planId) {
+    public BigDecimal calculatePrice(OffsetDateTime time, String planId) {
+        // Buscamos el plan activo en la base de datos
+        PricingPlanEntity plan = planRepository.findByIdAndActiveTrue(planId)
+                .orElseGet(() -> {
+                    log.warn("Plan {} no encontrado o inactivo. Aplicando plan BASIC.", planId);
+                    return planRepository.findById("BASIC")
+                            .orElseThrow(() -> new InfrastructureException("Error crítico: No existe el plan BASIC."));
+                });
 
-        String effectivePlanId = (planId == null) ? "BASIC" : planId;
+        // Determinamos si es hora Punta o Valle
+        // Punta: 10:00 a 14:00 y 18:00 a 22:00 (Ejemplo estándar)
+        int hour = time.getHour();
+        boolean isPunta = (hour >= 10 && hour < 14) || (hour >= 18 && hour < 22);
 
-        // 1. Buscamos el plan en la base de datos
-        PricingPlanEntity plan = planRepository.findById(effectivePlanId)
-                .orElseThrow(() -> new InfrastructureException("Plan de precios no encontrado: " + planId));
+        BigDecimal finalPrice = isPunta ? plan.getPricePunta() : plan.getPriceValle();
 
-        // 2. Lógica de tiempo (la que ya teníamos)
-        LocalTime horaActual = fecha.toLocalTime();
-        LocalTime inicioPunta = LocalTime.of(8, 0);
-        LocalTime finPunta = LocalTime.of(22, 0);
-
-        // 3. Aplicamos los precios DEL PLAN
-        if (!horaActual.isBefore(inicioPunta) && horaActual.isBefore(finPunta)) {
-            return plan.getPricePunta();
-        } else {
-            return plan.getPriceValle();
-        }
+        log.debug("Calculando precio para plan {}: {} €/kWh (Hora: {})", planId, finalPrice, hour);
+        return finalPrice;
     }
 }

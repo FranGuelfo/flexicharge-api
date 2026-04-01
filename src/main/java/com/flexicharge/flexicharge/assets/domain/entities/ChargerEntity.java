@@ -2,6 +2,8 @@ package com.flexicharge.flexicharge.assets.domain.entities;
 
 import jakarta.persistence.Id;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.OffsetDateTime;
@@ -28,4 +30,10 @@ public class ChargerEntity {
     private OffsetDateTime lastHeartbeat;
 
     private boolean active = true;
+
+    @CreatedDate
+    private OffsetDateTime createdAt;
+
+    @LastModifiedDate
+    private OffsetDateTime updatedAt;
 }

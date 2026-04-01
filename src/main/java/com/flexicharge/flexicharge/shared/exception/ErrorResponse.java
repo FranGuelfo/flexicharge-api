@@ -1,4 +1,4 @@
-package com.flexicharge.flexicharge.billing.infrastructure.adapters.in.rest.dto;
+package com.flexicharge.flexicharge.shared.exception;
 
 import lombok.Builder;
 import lombok.Data;

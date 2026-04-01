@@ -15,10 +15,6 @@ import java.util.List;
 public class ChargerService {
     private final ChargerRepository repository;
 
-    public List<ChargerEntity> getAllChargers() {
-        return repository.findAll();
-    }
-
     public ChargerEntity createOrUpdateCharger(ChargerEntity charger) {
         log.info("Registrando/Actualizando cargador: {}", charger.getId());
         // Si es nuevo, aseguramos que empiece como AVAILABLE
@@ -29,10 +25,16 @@ public class ChargerService {
     }
 
     public void deleteCharger(String id) {
-        if (!repository.existsById(id)) {
-            throw new InfrastructureException("No se puede eliminar: El cargador [" + id + "] no existe.");
-        }
-        log.warn("Eliminando cargador de la red: {}", id);
-        repository.deleteById(id);
+        ChargerEntity charger = repository.findByIdAndActiveTrue(id)
+                .orElseThrow(() -> new InfrastructureException("No se puede eliminar: El cargador no existe o ya está inactivo."));
+
+        log.warn("Realizando Soft Delete del cargador: {}", id);
+
+        charger.setActive(false);
+        repository.save(charger);
+    }
+
+    public List<ChargerEntity> getAllChargers() {
+        return repository.findAllByActiveTrue();
     }
 }

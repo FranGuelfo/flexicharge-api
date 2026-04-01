@@ -18,10 +18,18 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        // Solo insertamos si la tabla está vacía
         if (planRepository.count() == 0) {
-            planRepository.save(new PricingPlanEntity("BASIC", "Plan Básico", "Tarifa estándar",
-                    new BigDecimal("0.50"), new BigDecimal("0.30"), BigDecimal.ZERO));
+            PricingPlanEntity basicPlan = PricingPlanEntity.builder()
+                    .id("BASIC")
+                    .name("Plan Básico")
+                    .description("Tarifa estándar")
+                    .pricePunta(new BigDecimal("0.50"))
+                    .priceValle(new BigDecimal("0.30"))
+                    .monthlyFee(BigDecimal.ZERO)
+                    .active(true)
+                    .build();
+
+            planRepository.save(basicPlan);
         }
 
         if (chargerRepository.count() == 0) {

@@ -28,10 +28,16 @@ public class PricingPlanService {
         if ("BASIC".equalsIgnoreCase(id)) {
             throw new IllegalArgumentException("No se puede eliminar el plan BASIC por ser el sistema de tarifa por defecto.");
         }
-        if (!repository.existsById(id)) {
-            throw new InfrastructureException("El plan [" + id + "] no existe.");
-        }
-        log.warn("Eliminando plan de precios: {}", id);
-        repository.deleteById(id);
+
+        PricingPlanEntity plan = repository.findByIdAndActiveTrue(id)
+                .orElseThrow(() -> new InfrastructureException("El plan [" + id + "] no existe o ya ha sido eliminado."));
+
+        log.warn("Realizando Soft Delete del plan de precios: {}", id);
+
+        plan.setActive(false);
+
+        repository.save(plan);
+
+        log.info("Plan [{}] marcado como inactivo con éxito.", id);
     }
 }

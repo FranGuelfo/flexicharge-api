@@ -7,7 +7,7 @@ import com.flexicharge.flexicharge.plans.application.PriceCalculator;
 import com.flexicharge.flexicharge.shared.exception.InfrastructureException;
 import com.flexicharge.flexicharge.billing.infrastructure.adapters.out.persistence.InvoiceRepository;
 import com.flexicharge.flexicharge.charging.domain.entities.HeartbeatLog;
-import com.flexicharge.flexicharge.shared.Address;
+import com.flexicharge.flexicharge.shared.model.Address;
 import com.flexicharge.flexicharge.identity.domain.entities.CustomerEntity;
 import com.flexicharge.flexicharge.identity.domain.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;

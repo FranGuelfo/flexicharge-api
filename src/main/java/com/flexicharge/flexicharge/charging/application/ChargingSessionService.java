@@ -42,8 +42,9 @@ public class ChargingSessionService {
                 .orElseThrow(() -> new InfrastructureException("Perfil de cliente no encontrado. Debes completar tus datos antes de cargar."));
 
         // 2. VALIDAR CARGADOR
-        ChargerEntity charger = chargerRepository.findById(chargerId)
-                .orElseThrow(() -> new InfrastructureException("El cargador [" + chargerId + "] no existe en la red."));
+        // Cambiamos el findById por el que filtra por activos
+        ChargerEntity charger = chargerRepository.findByIdAndActiveTrue(chargerId)
+                .orElseThrow(() -> new InfrastructureException("El cargador no está disponible en la red actual."));
 
         // 3. CONTROL DE ESTADO DEL CARGADOR
         // Si alguien ya lo está usando, lanzamos error para evitar "pisar" otra carga
@@ -64,7 +65,6 @@ public class ChargingSessionService {
         ChargingSession session = ChargingSession.builder()
                 .userEmail(email)
                 .chargerId(chargerId)
-                .startTime(OffsetDateTime.now(ZoneOffset.UTC))
                 .initialKwh(initialKwh)
                 .currentKwh(initialKwh)
                 .status(AppConstants.STARTED)
@@ -148,25 +148,39 @@ public class ChargingSessionService {
     }
 
     public ActiveSessionDTO getActiveSession(String email) {
+        // 1. Buscamos la sesión activa
         ChargingSession session = repository.findFirstByUserEmailAndStatusOrderByStartTimeDesc(email, AppConstants.STARTED)
-                .orElseThrow(() -> new InfrastructureException("No hay sesión activa."));
+                .orElseThrow(() -> new InfrastructureException("No se ha encontrado ninguna sesión activa para el usuario."));
 
+        // 2. Buscamos al cliente (para obtener su plan de precios)
+        CustomerEntity customer = customerRepository.findByEmail(email)
+                .orElseThrow(() -> new InfrastructureException("Error: Cliente no identificado."));
+
+        // 3. Delegamos la creación del DTO al método especializado
+        return mapToActiveSessionDTO(session, customer);
+    }
+
+    /**
+     * Método privado para encapsular la lógica de mapeo y cálculos financieros.
+     * Mantiene el método principal limpio y fácil de leer.
+     */
+    private ActiveSessionDTO mapToActiveSessionDTO(ChargingSession session, CustomerEntity customer) {
+        // Calculamos kWh consumidos hasta el momento
         Double consumedSoFar = energyCalculator.calculateConsumedEnergy(session.getInitialKwh(), session.getCurrentKwh());
 
-        // Obtenemos el cliente para saber su plan
-        CustomerEntity customer = customerRepository.findByEmail(email)
-                .orElseThrow(() -> new InfrastructureException("Cliente no encontrado"));
-
-        // Calculamos el precio usando el plan del cliente
+        // Calculamos el precio actual según el plan del cliente (Delegado al PriceCalculator)
         BigDecimal currentPrice = priceCalculator.calculatePrice(OffsetDateTime.now(), customer.getPlanId());
+
+        // Calculamos el coste estimado
         BigDecimal estimatedCost = currentPrice.multiply(BigDecimal.valueOf(consumedSoFar))
                 .setScale(2, RoundingMode.HALF_UP);
+
+        log.debug("Mapeando sesión activa. Consumo: {} kWh, Coste est.: {}€", consumedSoFar, estimatedCost);
 
         return ActiveSessionDTO.builder()
                 .sessionId(session.getId())
                 .chargerId(session.getChargerId())
-                .customerName(customer.getFirstName() + " " + customer.getLastName())
-                .planName(customer.getPlanId())
+                .customerName(customer.getFirstName() + " " + customer.getLastName()) // Añadido para mejor UX
                 .startTime(session.getStartTime())
                 .initialKwh(session.getInitialKwh())
                 .currentKwh(session.getCurrentKwh())
