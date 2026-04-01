@@ -2,7 +2,7 @@ package com.flexicharge.flexicharge.billing.application;
 
 import com.flexicharge.flexicharge.billing.domain.entities.InvoiceEntity;
 import com.flexicharge.flexicharge.billing.domain.ports.out.PdfGeneratorPort;
-import com.flexicharge.flexicharge.plans.utils.PriceCalculator;
+import com.flexicharge.flexicharge.plans.application.PriceCalculator;
 import com.flexicharge.flexicharge.billing.infrastructure.adapters.out.persistence.InvoiceRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

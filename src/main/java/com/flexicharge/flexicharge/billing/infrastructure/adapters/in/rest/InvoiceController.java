@@ -1,4 +1,4 @@
-package com.flexicharge.flexicharge.billing.infrastructure.adapters.in.web;
+package com.flexicharge.flexicharge.billing.infrastructure.adapters.in.rest;
 
 import com.flexicharge.flexicharge.billing.application.GenerateInvoiceService;
 import com.flexicharge.flexicharge.billing.domain.entities.InvoiceEntity;

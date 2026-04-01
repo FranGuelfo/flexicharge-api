@@ -2,9 +2,12 @@ package com.flexicharge.flexicharge.plans.domain.entities;
 
 import jakarta.persistence.Id;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 
 @Getter
 @Setter
@@ -26,4 +29,12 @@ public class PricingPlanEntity {
 
     // Podemos añadir un descuento fijo o cuota mensual en el futuro
     private BigDecimal monthlyFee;
+
+    private boolean active = true;
+
+    @CreatedDate
+    private OffsetDateTime createdAt;
+
+    @LastModifiedDate
+    private OffsetDateTime updatedAt;
 }

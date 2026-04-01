@@ -1,4 +1,4 @@
-package com.flexicharge.flexicharge.config;
+package com.flexicharge.flexicharge.shared.config;
 
 import com.flexicharge.flexicharge.security.JwtAuthenticationFilter;
 import io.swagger.v3.oas.models.Components;

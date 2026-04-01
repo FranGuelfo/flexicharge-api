@@ -1,4 +1,4 @@
-package com.flexicharge.flexicharge.shared;
+package com.flexicharge.flexicharge.shared.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

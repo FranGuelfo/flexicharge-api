@@ -1,7 +1,8 @@
-package com.flexicharge.flexicharge.config;
+package com.flexicharge.flexicharge.shared.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.core.convert.converter.Converter;
 
@@ -11,6 +12,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 @Configuration
+@EnableMongoAuditing
 public class MongoConfig {
 
     @Bean

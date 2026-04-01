@@ -3,6 +3,8 @@ package com.flexicharge.flexicharge.billing.domain.entities;
 import com.flexicharge.flexicharge.charging.domain.entities.HeartbeatLog;
 import jakarta.persistence.Id;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
@@ -29,7 +31,6 @@ public class InvoiceEntity {
     private OffsetDateTime sessionEnd;
     private Double initialKwh;
     private Double finalKwh;
-    private OffsetDateTime createdAt;
     private String pdfPath;
     private List<ChargeSlot> details;
     private String customerFullName;
@@ -39,4 +40,9 @@ public class InvoiceEntity {
     @Builder.Default
     private List<HeartbeatLog> history = new ArrayList<>();
 
+    @CreatedDate
+    private OffsetDateTime createdAt;
+
+    @LastModifiedDate
+    private OffsetDateTime updatedAt;
 }
